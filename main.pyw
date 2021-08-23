@@ -1,9 +1,4 @@
-import os
-import time
 import wx
-import sys
-
-from wx.core import Size
 
 class ProgramFrame(wx.Frame):
     def __init__(self):
@@ -61,8 +56,8 @@ class ProgramPanel(wx.Panel):
 
         # Fonts
         font_A = wx.Font(15, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Consolas')
-        font_B = wx.Font(20, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Consolas')
-
+        font_B = wx.Font(20, wx.FONTFAMILY_SWISS, wx.NORMAL, wx.FONTWEIGHT_SEMIBOLD, False, u'Consolas')
+        font_C = wx.Font(15, wx.MODERN, wx.NORMAL, wx.FONTWEIGHT_LIGHT, False, u'Consolas')
 
         # Add Labeling Items
         label_Valores = wx.StaticText(
@@ -98,6 +93,78 @@ class ProgramPanel(wx.Panel):
             pos=(850,10), size=(50,35), style= wx.ALIGN_LEFT
         )
         label_quotaModificadaArredondada.SetFont(font_B)
+
+
+        # Add Total Values
+        label_totalValores_label = wx.StaticText(
+            self, label='Total: ',
+            pos=(10,530), size=(50,35), style= wx.ALIGN_LEFT
+        )
+        label_totalValores_label.SetFont(font_B)
+
+
+        self.label_totalValores_value = wx.StaticText(
+            self, label='14542',
+            pos=(160,535), size=(80,35), style= wx.ALIGN_RIGHT
+        )
+        self.label_totalValores_value.SetFont(font_A)
+
+
+        self.label_totalPadrao = wx.StaticText(
+            self, label='2186',
+            pos=(445,535), size=(50,35), style= wx.ALIGN_CENTER
+        )
+        self.label_totalPadrao.SetFont(font_A)
+
+
+        self.label_totalModificado = wx.StaticText(
+            self, label='6332',
+            pos=(833,535), size=(80,35), style= wx.ALIGN_CENTER
+        )
+        self.label_totalModificado.SetFont(font_A)
+
+
+        # Add Valor a Dividir
+        label_valorDividir = wx.StaticText(
+            self, label='Repartir: ',
+            pos=(10,575), size=(50,35), style= wx.ALIGN_LEFT
+        )
+        label_valorDividir.SetFont(font_C)
+
+
+        self.textBox_valorDividir = wx.TextCtrl(
+            self, value='',
+            pos=(120,575), size=(120,25), 
+            style=wx.TE_RICH | wx.TE_PROCESS_ENTER
+        )
+        self.textBox_valorDividir.SetFont(font_A)
+        self.Bind(
+            event=wx.EVT_TEXT,
+            handler=self.numberEnterHandler,
+            source=self.textBox_valorDividir
+        )
+
+
+        # Add Divisores
+        label_divisor_label = wx.StaticText(
+            self, label='Divisor: ',
+            pos=(300,575), size=(50,35), style= wx.ALIGN_LEFT
+        )
+        label_divisor_label.SetFont(font_C)
+
+
+        self.label_divisorPadrao_value = wx.StaticText(
+            self, label='164',
+            pos=(430,575), size=(80,35), style= wx.ALIGN_CENTER
+        )
+        self.label_divisorPadrao_value.SetFont(font_C)
+
+
+        self.label_divisorModificado_value = wx.StaticText(
+            self, label='147',
+            pos=(832,575), size=(80,35), style= wx.ALIGN_CENTER
+        )
+        self.label_divisorModificado_value.SetFont(font_C)
 
 
         # Add Values Items
@@ -689,56 +756,11 @@ class ProgramPanel(wx.Panel):
         self.label_quotaModificadaArredondada_L.SetFont(font_A)
 
 
-        #13.1
-        label_M = wx.StaticText(
-            self, label='M:',
-            pos=(10,530), size=(10,20), style= wx.ALIGN_LEFT
-        )
-        label_M.SetFont(font_A)
-
-        #13.2
-        self.textBox_M = wx.TextCtrl(
-            self, value='',
-            pos=(40,530),size=(200,27), 
-            style=wx.TE_RICH | wx.TE_PROCESS_ENTER
-        )
-        self.textBox_M.SetFont(font_A)
-        self.Bind(
-            event=wx.EVT_TEXT,
-            handler=self.numberEnterHandler,
-            source=self.textBox_M
-        )
-
-        #13.3
-        self.label_quotaPadrao_M = wx.StaticText(
-            self, label='21',
-            pos=(250,530), size=(180,20), style= wx.ALIGN_CENTER
-        )
-        self.label_quotaPadrao_M.SetFont(font_A)
-
-        #13.4
-        self.label_quotaPadraoArredondada_M = wx.StaticText(
-            self, label='22',
-            pos=(450,530), size=(40,20), style= wx.ALIGN_CENTER
-        )
-        self.label_quotaPadraoArredondada_M.SetFont(font_A)
-
-        #13.5
-        self.label_quotaModificada_M = wx.StaticText(
-            self, label='23',
-            pos=(635,530), size=(180,20), style= wx.ALIGN_CENTER
-        )
-        self.label_quotaModificada_M.SetFont(font_A)
-
-        #13.6
-        self.label_quotaModificadaArredondada_M = wx.StaticText(
-            self, label='24',
-            pos=(852,530), size=(40,20), style= wx.ALIGN_CENTER
-        )
-        self.label_quotaModificadaArredondada_M.SetFont(font_A)
-
-
         # Color
+        self.label_totalValores_value.SetForegroundColour(wx.Colour(90,90,90))
+        self.label_totalPadrao.SetForegroundColour(wx.Colour(90,90,90))
+        self.label_totalModificado.SetForegroundColour(wx.Colour(90,90,90))
+
         self.label_quotaPadrao_A.SetForegroundColour(wx.Colour(100,150,100))
         self.label_quotaPadrao_B.SetForegroundColour(wx.Colour(100,150,100))
         self.label_quotaPadrao_C.SetForegroundColour(wx.Colour(100,150,100))
@@ -751,7 +773,6 @@ class ProgramPanel(wx.Panel):
         self.label_quotaPadrao_J.SetForegroundColour(wx.Colour(100,150,100))
         self.label_quotaPadrao_K.SetForegroundColour(wx.Colour(100,150,100))
         self.label_quotaPadrao_L.SetForegroundColour(wx.Colour(100,150,100))
-        self.label_quotaPadrao_M.SetForegroundColour(wx.Colour(100,150,100))
         
         self.label_quotaPadraoArredondada_A.SetForegroundColour(wx.Colour(50,130,50))
         self.label_quotaPadraoArredondada_B.SetForegroundColour(wx.Colour(50,130,50))
@@ -765,7 +786,6 @@ class ProgramPanel(wx.Panel):
         self.label_quotaPadraoArredondada_J.SetForegroundColour(wx.Colour(50,130,50))
         self.label_quotaPadraoArredondada_K.SetForegroundColour(wx.Colour(50,130,50))
         self.label_quotaPadraoArredondada_L.SetForegroundColour(wx.Colour(50,130,50))
-        self.label_quotaPadraoArredondada_M.SetForegroundColour(wx.Colour(50,130,50))
 
         self.label_quotaModificada_A.SetForegroundColour(wx.Colour(60,60,160))
         self.label_quotaModificada_B.SetForegroundColour(wx.Colour(60,60,160))
@@ -779,7 +799,6 @@ class ProgramPanel(wx.Panel):
         self.label_quotaModificada_J.SetForegroundColour(wx.Colour(60,60,160))
         self.label_quotaModificada_K.SetForegroundColour(wx.Colour(60,60,160))
         self.label_quotaModificada_L.SetForegroundColour(wx.Colour(60,60,160))
-        self.label_quotaModificada_M.SetForegroundColour(wx.Colour(60,60,160))
 
         self.label_quotaModificadaArredondada_A.SetForegroundColour(wx.Colour(0,0,130))
         self.label_quotaModificadaArredondada_B.SetForegroundColour(wx.Colour(0,0,130))
@@ -793,112 +812,546 @@ class ProgramPanel(wx.Panel):
         self.label_quotaModificadaArredondada_J.SetForegroundColour(wx.Colour(0,0,130))
         self.label_quotaModificadaArredondada_K.SetForegroundColour(wx.Colour(0,0,130))
         self.label_quotaModificadaArredondada_L.SetForegroundColour(wx.Colour(0,0,130))
-        self.label_quotaModificadaArredondada_M.SetForegroundColour(wx.Colour(0,0,130))
 
+    def clearAllValues(self):
+        self.label_quotaPadrao_A.SetLabel('')
+        self.label_quotaPadrao_B.SetLabel('')
+        self.label_quotaPadrao_C.SetLabel('')
+        self.label_quotaPadrao_D.SetLabel('')
+        self.label_quotaPadrao_E.SetLabel('')
+        self.label_quotaPadrao_F.SetLabel('')
+        self.label_quotaPadrao_G.SetLabel('')
+        self.label_quotaPadrao_H.SetLabel('')
+        self.label_quotaPadrao_I.SetLabel('')
+        self.label_quotaPadrao_J.SetLabel('')
+        self.label_quotaPadrao_K.SetLabel('')
+        self.label_quotaPadrao_L.SetLabel('')
+        
+        self.label_quotaPadraoArredondada_A.SetLabel('')
+        self.label_quotaPadraoArredondada_B.SetLabel('')
+        self.label_quotaPadraoArredondada_C.SetLabel('')
+        self.label_quotaPadraoArredondada_D.SetLabel('')
+        self.label_quotaPadraoArredondada_E.SetLabel('')
+        self.label_quotaPadraoArredondada_F.SetLabel('')
+        self.label_quotaPadraoArredondada_G.SetLabel('')
+        self.label_quotaPadraoArredondada_H.SetLabel('')
+        self.label_quotaPadraoArredondada_I.SetLabel('')
+        self.label_quotaPadraoArredondada_J.SetLabel('')
+        self.label_quotaPadraoArredondada_K.SetLabel('')
+        self.label_quotaPadraoArredondada_L.SetLabel('')
+
+        self.label_quotaModificada_A.SetLabel('')
+        self.label_quotaModificada_B.SetLabel('')
+        self.label_quotaModificada_C.SetLabel('')
+        self.label_quotaModificada_D.SetLabel('')
+        self.label_quotaModificada_E.SetLabel('')
+        self.label_quotaModificada_F.SetLabel('')
+        self.label_quotaModificada_G.SetLabel('')
+        self.label_quotaModificada_H.SetLabel('')
+        self.label_quotaModificada_I.SetLabel('')
+        self.label_quotaModificada_J.SetLabel('')
+        self.label_quotaModificada_K.SetLabel('')
+        self.label_quotaModificada_L.SetLabel('')
+
+        self.label_quotaModificadaArredondada_A.SetLabel('')
+        self.label_quotaModificadaArredondada_B.SetLabel('')
+        self.label_quotaModificadaArredondada_C.SetLabel('')
+        self.label_quotaModificadaArredondada_D.SetLabel('')
+        self.label_quotaModificadaArredondada_E.SetLabel('')
+        self.label_quotaModificadaArredondada_F.SetLabel('')
+        self.label_quotaModificadaArredondada_G.SetLabel('')
+        self.label_quotaModificadaArredondada_H.SetLabel('')
+        self.label_quotaModificadaArredondada_I.SetLabel('')
+        self.label_quotaModificadaArredondada_J.SetLabel('')
+        self.label_quotaModificadaArredondada_K.SetLabel('')
+        self.label_quotaModificadaArredondada_L.SetLabel('')
+
+        self.label_totalValores_value.SetLabel('')
+        self.label_totalPadrao.SetLabel('')
+        self.label_totalModificado.SetLabel('')
+
+        self.label_divisorPadrao_value.SetLabel('')
+        self.label_divisorModificado_value.SetLabel('')
+
+    def checkDividir(self):
+        if self.textBox_valorDividir.GetValue():
+            try:
+                int(self.textBox_valorDividir.GetValue())
+                self.textBox_valorDividir.SetBackgroundColour(wx.Colour(255,255,255))
+                self.valorDividir = int(self.textBox_valorDividir.GetValue())
+                return True
+            except:
+                pass
+        self.textBox_valorDividir.SetBackgroundColour(wx.Colour(255,0,0))
+        return False
+
+    def getValues(self):
+        if self.textBox_A.GetValue():
+            try: 
+                int(self.textBox_A.GetValue())
+                self.textBox_A.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['A'] = [True, int(self.textBox_A.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['A'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_A.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_A.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['A'] = [False, 0, 0, 0, 0, 0]
+
+
+        if self.textBox_B.GetValue():
+            try:
+                int(self.textBox_B.GetValue())
+                self.textBox_B.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['B'] = [True, int(self.textBox_B.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['B'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_B.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_B.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['B'] = [False, 0, 0, 0, 0, 0]
+
+        
+        if self.textBox_C.GetValue():
+            try:
+                int(self.textBox_C.GetValue())
+                self.textBox_C.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['C'] = [True, int(self.textBox_C.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['C'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_C.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_C.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['C'] = [False, 0, 0, 0, 0, 0]
+        
+
+        if self.textBox_D.GetValue():
+            try:
+                int(self.textBox_D.GetValue())
+                self.textBox_D.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['D'] = [True, int(self.textBox_D.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['D'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_D.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_D.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['D'] = [False, 0, 0, 0, 0, 0]
+
+
+        if self.textBox_E.GetValue():
+            try:
+                int(self.textBox_E.GetValue())
+                self.textBox_E.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['E'] = [True, int(self.textBox_E.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['E'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_E.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_E.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['E'] = [False, 0, 0, 0, 0, 0]
+        
+
+        if self.textBox_F.GetValue():
+            try:
+                int(self.textBox_F.GetValue())
+                self.textBox_F.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['F'] = [True, int(self.textBox_F.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['F'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_F.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_F.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['F'] = [False, 0, 0, 0, 0, 0]
+
+
+        if self.textBox_G.GetValue():
+            try:
+                int(self.textBox_G.GetValue())
+                self.textBox_G.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['G'] = [True, int(self.textBox_G.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['G'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_G.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_G.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['G'] = [False, 0, 0, 0, 0, 0]
+
+        
+        if self.textBox_H.GetValue():
+            try:
+                int(self.textBox_H.GetValue())
+                self.textBox_H.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['H'] = [True, int(self.textBox_H.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['H'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_H.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_H.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['H'] = [False, 0, 0, 0, 0, 0]
+
+
+        if self.textBox_I.GetValue():
+            try:
+                int(self.textBox_I.GetValue())
+                self.textBox_I.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['I'] = [True, int(self.textBox_I.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['I'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_I.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_I.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['I'] = [False, 0, 0, 0, 0, 0]
+
+
+        if self.textBox_J.GetValue():
+            try:
+                int(self.textBox_J.GetValue())
+                self.textBox_A.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['J'] = [True, int(self.textBox_J.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['J'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_J.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_J.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['J'] = [False, 0, 0, 0, 0, 0]
+
+
+        if self.textBox_K.GetValue():
+            try:
+                int(self.textBox_K.GetValue())
+                self.textBox_K.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['K'] = [True, int(self.textBox_K.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['K'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_K.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_K.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['K'] = [False, 0, 0, 0, 0, 0]
+
+
+        if self.textBox_L.GetValue():
+            try:
+                int(self.textBox_L.GetValue())
+                self.textBox_L.SetBackgroundColour(wx.Colour(255,255,255))
+                self.values['L'] = [True, int(self.textBox_L.GetValue()), 0, 0, 0, 0]
+            except:
+                self.values['L'] = [False, 0, 0, 0, 0, 0]
+                self.textBox_L.SetBackgroundColour(wx.Colour(255,0,0))
+        else:
+            self.textBox_L.SetBackgroundColour(wx.Colour(255,255,255))
+            self.values['L'] = [False, 0, 0, 0, 0, 0]
+
+    def totalValues(self):
+        total = 0
+        for x in self.values:
+            if self.values[x][0]:
+                total += self.values[x][1]
+        if total != 0:
+            self.label_totalValores_value.SetLabel(str(total))
+        self.totalValues_value = total
+        
+    def calDivisorPadrao(self):
+        self.divisorPadrao = self.totalValues_value / self.valorDividir
+        if self.divisorPadrao != 0:
+            self.label_divisorPadrao_value.SetLabel(str(round(self.divisorPadrao, 3)))
+            return
+        self.label_divisorPadrao_value.SetLabel('')
+
+    def calCotaPadrao(self):
+        if self.values['A'][0]:
+            self.values['A'][2] = self.values['A'][1] / self.divisorPadrao
+            self.label_quotaPadrao_A.SetLabel(str(round(self.values['A'][2], 3)))
+
+        if self.values['B'][0]:
+            self.values['B'][2] = self.values['B'][1] / self.divisorPadrao
+            self.label_quotaPadrao_B.SetLabel(str(round(self.values['B'][2], 3)))
+
+        if self.values['C'][0]:
+            self.values['C'][2] = self.values['C'][1] / self.divisorPadrao
+            self.label_quotaPadrao_C.SetLabel(str(round(self.values['C'][2], 3)))
+
+        if self.values['D'][0]:
+            self.values['D'][2] = self.values['D'][1] / self.divisorPadrao
+            self.label_quotaPadrao_D.SetLabel(str(round(self.values['D'][2], 3)))
+
+        if self.values['E'][0]:
+            self.values['E'][2] = self.values['E'][1] / self.divisorPadrao
+            self.label_quotaPadrao_E.SetLabel(str(round(self.values['E'][2], 3)))
+
+        if self.values['F'][0]:
+            self.values['F'][2] = self.values['F'][1] / self.divisorPadrao
+            self.label_quotaPadrao_F.SetLabel(str(round(self.values['F'][2], 3)))
+
+        if self.values['G'][0]:
+            self.values['G'][2] = self.values['G'][1] / self.divisorPadrao
+            self.label_quotaPadrao_G.SetLabel(str(round(self.values['G'][2], 3)))
+
+        if self.values['H'][0]:
+            self.values['H'][2] = self.values['H'][1] / self.divisorPadrao
+            self.label_quotaPadrao_H.SetLabel(str(round(self.values['H'][2], 3)))
+        
+        if self.values['I'][0]:
+            self.values['I'][2] = self.values['I'][1] / self.divisorPadrao
+            self.label_quotaPadrao_I.SetLabel(str(round(self.values['I'][2], 3)))
+
+        if self.values['J'][0]:
+            self.values['J'][2] = self.values['J'][1] / self.divisorPadrao
+            self.label_quotaPadrao_J.SetLabel(str(round(self.values['J'][2], 3)))
+
+        if self.values['K'][0]:
+            self.values['K'][2] = self.values['K'][1] / self.divisorPadrao
+            self.label_quotaPadrao_K.SetLabel(str(round(self.values['K'][2], 3)))
+
+        if self.values['L'][0]:
+            self.values['L'][2] = self.values['L'][1] / self.divisorPadrao
+            self.label_quotaPadrao_L.SetLabel(str(round(self.values['L'][2], 3)))
+
+    def calCotaPadraoArr(self):
+        for x in self.values:
+            if self.values[x][0]:
+                self.values[x][3] = int(round(self.values[x][2], 0))
+
+        if self.values['A'][0]:
+            self.label_quotaPadraoArredondada_A.SetLabel(str(self.values['A'][3]))
+
+        if self.values['B'][0]:
+            self.label_quotaPadraoArredondada_B.SetLabel(str(self.values['B'][3]))
+
+        if self.values['C'][0]:
+            self.label_quotaPadraoArredondada_C.SetLabel(str(self.values['C'][3]))
+
+        if self.values['D'][0]:
+            self.label_quotaPadraoArredondada_D.SetLabel(str(self.values['D'][3]))
+
+        if self.values['E'][0]:
+            self.label_quotaPadraoArredondada_E.SetLabel(str(self.values['E'][3]))
+
+        if self.values['F'][0]:
+            self.label_quotaPadraoArredondada_F.SetLabel(str(self.values['F'][3]))
+
+        if self.values['G'][0]:
+            self.label_quotaPadraoArredondada_G.SetLabel(str(self.values['G'][3]))
+
+        if self.values['H'][0]:
+            self.label_quotaPadraoArredondada_H.SetLabel(str(self.values['H'][3]))
+
+        if self.values['I'][0]:
+            self.label_quotaPadraoArredondada_I.SetLabel(str(self.values['I'][3]))
+
+        if self.values['J'][0]:
+            self.label_quotaPadraoArredondada_J.SetLabel(str(self.values['J'][3]))
+
+        if self.values['K'][0]:
+            self.label_quotaPadraoArredondada_K.SetLabel(str(self.values['K'][3]))
+
+        if self.values['L'][0]:
+            self.label_quotaPadraoArredondada_L.SetLabel(str(self.values['L'][3]))
+
+    def totalPadrao(self):
+        totalPadrao = 0 
+        for x in self.values:
+            if self.values[x][0]:
+                totalPadrao += self.values[x][3]
+        if totalPadrao != 0:
+            self.label_totalPadrao.SetLabel(str(totalPadrao))
+            self.totalPadrao_value = totalPadrao
+            return
+        self.totalPadrao_value = 0
+
+    def checkCotaModificada(self):
+        if self.totalModificada_value == self.valorDividir:
+            return True
+        else:
+            return False
+
+    def biasUpdater(self):
+        if self.totalModificada_value > self.valorDividir:
+            return True
+        if self.totalModificada_value < self.valorDividir:
+            return False
+
+    def updateCotaModificada_Value(self):
+        if self.values['A'][0]:
+            self.values['A'][4] = self.values['A'][1] / self.tempDivisorPadrao
+            self.values['A'][5] =  round(self.values['A'][4], 0)
+
+        if self.values['B'][0]:
+            self.values['B'][4] = self.values['B'][1] / self.tempDivisorPadrao
+            self.values['B'][5] =  round(self.values['B'][4], 0)
+
+        if self.values['C'][0]:
+            self.values['C'][4] = self.values['C'][1] / self.tempDivisorPadrao
+            self.values['C'][5] =  round(self.values['C'][4], 0)
+
+        if self.values['D'][0]:
+            self.values['D'][4] = self.values['D'][1] / self.tempDivisorPadrao
+            self.values['D'][5] =  round(self.values['D'][4], 0)
+
+        if self.values['E'][0]:
+            self.values['E'][4] = self.values['E'][1] / self.tempDivisorPadrao
+            self.values['E'][5] =  round(self.values['E'][4], 0)
+
+        if self.values['F'][0]:
+            self.values['F'][4] = self.values['F'][1] / self.tempDivisorPadrao
+            self.values['F'][5] =  round(self.values['F'][4], 0)
+
+        if self.values['G'][0]:
+            self.values['G'][4] = self.values['G'][1] / self.tempDivisorPadrao
+            self.values['G'][5] =  round(self.values['G'][4], 0)
+
+        if self.values['H'][0]:
+            self.values['H'][4] = self.values['H'][1] / self.tempDivisorPadrao
+            self.values['H'][5] =  round(self.values['H'][4], 0)
+
+        if self.values['I'][0]:
+            self.values['I'][4] = self.values['I'][1] / self.tempDivisorPadrao
+            self.values['I'][5] =  round(self.values['I'][4], 0)
+
+        if self.values['J'][0]:
+            self.values['J'][4] = self.values['J'][1] / self.tempDivisorPadrao
+            self.values['J'][5] =  round(self.values['J'][4], 0)
+
+        if self.values['K'][0]:
+            self.values['K'][4] = self.values['K'][1] / self.tempDivisorPadrao
+            self.values['K'][5] =  round(self.values['K'][4], 0)
+
+        if self.values['L'][0]:
+            self.values['L'][4] = self.values['L'][1] / self.tempDivisorPadrao
+            self.values['L'][5] =  round(self.values['L'][4], 0)
+
+        self.totalModificada_value = 0 
+        for x in self.values:
+            if self.values[x][0]:
+                self.totalModificada_value += self.values[x][5]
+
+    def calCotaModificada(self):
+        for x in self.values:
+            if self.values[x][0]:
+                self.values[x][4] = self.values[x][2]
+                self.values[x][5] = self.values[x][3]
+
+        self.totalModificada_value = self.totalPadrao_value
+        counter = 0
+        self.tempDivisorPadrao = self.divisorPadrao
+
+        if not self.checkCotaModificada():
+            bias = self.biasUpdater()
+        
+        while not self.checkCotaModificada() and not counter > 10000 :
+            counter += 1
+            biasTemp = bias
+            bias = self.biasUpdater()
+            if not bias == biasTemp:
+                break
+            if bias:
+                self.tempDivisorPadrao += 0.001
+            else:
+                self.tempDivisorPadrao -= 0.001
+            self.updateCotaModificada_Value()
+
+    def showCotaModificada(self):
+        if self.values['A'][0]:
+            self.label_quotaModificada_A.SetLabel(str(round(self.values['A'][4], 3)))
+
+        if self.values['B'][0]:
+            self.label_quotaModificada_B.SetLabel(str(round(self.values['B'][4], 3)))
+
+        if self.values['C'][0]:
+            self.label_quotaModificada_C.SetLabel(str(round(self.values['C'][4], 3)))
+
+        if self.values['D'][0]:
+            self.label_quotaModificada_D.SetLabel(str(round(self.values['D'][4], 3)))
+
+        if self.values['E'][0]:
+            self.label_quotaModificada_E.SetLabel(str(round(self.values['E'][4], 3)))
+
+        if self.values['F'][0]:
+            self.label_quotaModificada_F.SetLabel(str(round(self.values['F'][4], 3)))
+
+        if self.values['G'][0]:
+            self.label_quotaModificada_G.SetLabel(str(round(self.values['G'][4], 3)))
+
+        if self.values['H'][0]:
+            self.label_quotaModificada_H.SetLabel(str(round(self.values['H'][4], 3)))
+
+        if self.values['I'][0]:
+            self.label_quotaModificada_I.SetLabel(str(round(self.values['I'][4], 3)))
+
+        if self.values['J'][0]:
+            self.label_quotaModificada_J.SetLabel(str(round(self.values['J'][4], 3)))
+
+        if self.values['K'][0]:
+            self.label_quotaModificada_K.SetLabel(str(round(self.values['K'][4], 3)))
+
+        if self.values['L'][0]:
+            self.label_quotaModificada_L.SetLabel(str(round(self.values['L'][4], 3)))
+
+    def showCotaModificadaArr(self):
+        if self.values['A'][0]:
+            self.label_quotaModificadaArredondada_A.SetLabel(str(int(self.values['A'][5])))
+
+        if self.values['B'][0]:
+            self.label_quotaModificadaArredondada_B.SetLabel(str(int(self.values['B'][5])))
+
+        if self.values['C'][0]:
+            self.label_quotaModificadaArredondada_C.SetLabel(str(int(self.values['C'][5])))
+
+        if self.values['D'][0]:
+            self.label_quotaModificadaArredondada_D.SetLabel(str(int(self.values['D'][5])))
+
+        if self.values['E'][0]:
+            self.label_quotaModificadaArredondada_E.SetLabel(str(int(self.values['E'][5])))
+
+        if self.values['F'][0]:
+            self.label_quotaModificadaArredondada_F.SetLabel(str(int(self.values['F'][5])))
+
+        if self.values['G'][0]:
+            self.label_quotaModificadaArredondada_G.SetLabel(str(int(self.values['G'][5])))
+
+        if self.values['H'][0]:
+            self.label_quotaModificadaArredondada_H.SetLabel(str(int(self.values['H'][5])))
+
+        if self.values['I'][0]:
+            self.label_quotaModificadaArredondada_I.SetLabel(str(int(self.values['I'][5])))
+
+        if self.values['J'][0]:
+            self.label_quotaModificadaArredondada_J.SetLabel(str(int(self.values['J'][5])))
+
+        if self.values['K'][0]:
+            self.label_quotaModificadaArredondada_K.SetLabel(str(int(self.values['K'][5])))
+
+        if self.values['L'][0]:
+            self.label_quotaModificadaArredondada_L.SetLabel(str(int(self.values['L'][5])))
+    
+    def showTotalCotaModificada(self):
+        if self.totalModificada_value != 0:
+            self.label_totalModificado.SetLabel(str(int(self.totalModificada_value)))
+
+    def showDivisorModificado(self):
+        if self.tempDivisorPadrao != 0:
+            self.label_divisorModificado_value.SetLabel(str(round(self.tempDivisorPadrao, 3)))
+
+    def showModificados(self):
+        if self.checkCotaModificada():
+            self.showCotaModificada()
+            self.showCotaModificadaArr()
+            self.showTotalCotaModificada()
+            self.showDivisorModificado()
 
     def numberEnterHandler(self, event):
-        print('atum')
-
-
-""" class temp():
-
-    def clear():
-        os.system('cls')
-
-    def lista(ListaNumeros):
-        clear()
-
-        print("Introduz o numero. E depois a frequencia absoluta.")
-        print("Quando terminares escreve *s*")
-        print("Para apagar um numero escreve *n*")
-        print("")
-        print("Lista:")
-
-        temp = ''
-
-        for x in ListaNumeros:
-            temp = temp + str(x) + '  '
-        print(temp)
-        print("")
-        ListaTemporario = input()
-        if ListaTemporario == "s":
-            return ListaNumeros
-        if ListaTemporario == "n":
-            try:
-                ListaNumeros.pop()
-                lista(ListaNumeros)
-            except:
-                lista(ListaNumeros)
-        try:
-            try:
-                ListaTemporario = int(ListaTemporario)
-                ListaNumeros.append(int(ListaTemporario))
-                lista(ListaNumeros)
-            except:
-                ListaTemporario = float(ListaTemporario)
-                ListaNumeros.append(float(ListaTemporario))
-                lista(ListaNumeros)
-        except:
-            if ListaTemporario != "s" and ListaTemporario != "n":
-                print("Nao percebi esse ultimo.")
-                time.sleep(0.8)
-                lista(ListaNumeros)
-
-    def cota(listaValores, valorDistribuir, bias):
-        divisorPadrao = 0
-        listaCotas = {}
-
-        for x in listaValores:
-            divisorPadrao += x
-        
-        divisorPadrao = divisorPadrao / valorDistribuir
-        divisorPadrao += bias
-        divisorPadrao = round(divisorPadrao, 3)
-
-        for x in listaValores:
-            cotaPadrao = x / divisorPadrao
-            listaCotas[str(x)] = round(cotaPadrao, 0)   
-        
-        return divisorPadrao, listaCotas
-
-    def total(listaCotas):
-        valorTotal = 0
-        for x in listaCotas:
-            valorTotal += listaCotas[x]
-        return valorTotal
-
-    def resolucao(listaValores, done, valorDistribuir, bias):
-        bias = round(bias, 3)
-        # Calculacao das cotas
-        divisorPadrao, listaCotas = cota(listaValores, valorDistribuir, bias)
-
-        #check if it is correct
-        valorTotal = total(listaCotas)
-        if valorTotal == valorDistribuir:
-            done = True
-        elif valorTotal < valorDistribuir:
-            bias -= 0.001
-        elif valorTotal > valorDistribuir:
-            bias += 0.001
-        
-        print(divisorPadrao)
-        print(listaCotas)
-
-    def calcular():
-            # Declaracao de variveis
-        listaValores = []
-
-        # Aquisicao de valores
-        lista(listaValores)
-        clear()
-
-        # Resolucao
-        done = False
-        valorDistribuir = 54
-        bias = 0
-
-        while not done:
-            resolucao(listaValores, done, valorDistribuir, bias) """
+        self.clearAllValues()
+        if not self.checkDividir():
+            return
+        self.values = {}
+        self.getValues()
+        self.totalValues()
+        self.calDivisorPadrao()
+        self.calCotaPadrao()
+        self.calCotaPadraoArr()
+        self.totalPadrao()
+        self.calCotaModificada()
+        self.showModificados()
+        print(self.values)
 
 if __name__ == "__main__":
     app = wx.App(False)
