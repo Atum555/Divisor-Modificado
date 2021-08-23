@@ -1,6 +1,5 @@
-import os
 import time
-from typing import List
+import os
 
 def clear():
     os.system('cls')
@@ -50,7 +49,7 @@ def cota(listaValores, valorDistribuir, bias):
 
     for x in listaValores:
         divisorPadrao += x
-    
+        
     divisorPadrao = divisorPadrao / valorDistribuir
     divisorPadrao += bias
     divisorPadrao = round(divisorPadrao, 3)
@@ -58,7 +57,7 @@ def cota(listaValores, valorDistribuir, bias):
     for x in listaValores:
         cotaPadrao = x / divisorPadrao
         listaCotas[str(x)] = round(cotaPadrao, 0)   
-     
+        
     return divisorPadrao, listaCotas
 
 def total(listaCotas):
@@ -67,30 +66,22 @@ def total(listaCotas):
         valorTotal += listaCotas[x]
     return valorTotal
 
-def resolucao(listaValores):
+def resolucao(listaValores, valorDistribuir, bias):
     done = False
-    valorDistribuir = 110
-    bias = 0
+    bias = round(bias, 3)
+    # Calculacao das cotas
+    divisorPadrao, listaCotas = cota(listaValores, valorDistribuir, bias)
 
-    while not done:
-        bias = round(bias, 3)
-        # Calculacao das cotas
-        divisorPadrao, listaCotas = cota(listaValores, valorDistribuir, bias)
+    #check if it is correct
+    valorTotal = total(listaCotas)
+    if valorTotal == valorDistribuir:
+        done = True
+    elif valorTotal < valorDistribuir:
+        bias -= 0.001
+    elif valorTotal > valorDistribuir:
+        bias += 0.001
 
-        #check if it is correct
-        valorTotal = total(listaCotas)
-        if valorTotal == valorDistribuir:
-            done = True
-        elif valorTotal < valorDistribuir:
-            bias -= 0.001
-        elif valorTotal > valorDistribuir:
-            bias += 0.001
-    
-    print(divisorPadrao)
-    print(listaCotas)
-
-
-
+    return done, bias, listaCotas, divisorPadrao
 def main():
     # Declaracao de variveis
     listaValores = []
@@ -100,8 +91,15 @@ def main():
     clear()
 
     # Resolucao
-    resolucao(listaValores)
+    done = False
+    valorDistribuir = 54
+    bias = 0
 
+    while not done:
+        done, bias, listaCotas, divisorPadrao  = resolucao(listaValores, valorDistribuir, bias)
+
+    print(divisorPadrao)
+    print(listaCotas)
 
 if __name__ == "__main__":
     main()
