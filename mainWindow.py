@@ -1233,10 +1233,43 @@ class ProgramPanel(wx.Panel):
         self.totalModificada_value = self.totalPadrao_value
         counter = 0
         self.tempDivisorPadrao = self.divisorPadrao
+        self.tempDivisorPadrao = round(self.tempDivisorPadrao, 0)
 
         if not self.checkCotaModificada():
             bias = self.biasUpdater()
         
+        while not self.checkCotaModificada() and not counter > 10000 :
+            counter += 1
+            biasTemp = bias
+            bias = self.biasUpdater()
+            if not bias == biasTemp:
+                break
+            if bias:
+                self.tempDivisorPadrao += 0.1
+            else:
+                self.tempDivisorPadrao -= 0.1
+            self.updateCotaModificada_Value()
+
+        if not self.checkCotaModificada():
+            self.tempDivisorPadrao = self.divisorPadrao
+            self.tempDivisorPadrao = round(self.tempDivisorPadrao, 0)
+
+        while not self.checkCotaModificada() and not counter > 10000 :
+            counter += 1
+            biasTemp = bias
+            bias = self.biasUpdater()
+            if not bias == biasTemp:
+                break
+            if bias:
+                self.tempDivisorPadrao += 0.01
+            else:
+                self.tempDivisorPadrao -= 0.01
+            self.updateCotaModificada_Value()
+
+        if not self.checkCotaModificada():
+            self.tempDivisorPadrao = self.divisorPadrao
+            self.tempDivisorPadrao = round(self.tempDivisorPadrao, 0)
+            
         while not self.checkCotaModificada() and not counter > 10000 :
             counter += 1
             biasTemp = bias
